@@ -1,10 +1,14 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Hello QuizController!{% endblock %}
-
 {% block body %}
     <div id="app"></div>
 {% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('authoring') }}
+{% endblock %}
 {% block javascripts %}
+    <script src="https://questioneditor.learnosity.com/?latest"></script>
     {{ encore_entry_script_tags('authoring') }}
 {% endblock %}

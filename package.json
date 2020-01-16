@@ -15,5 +15,10 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production"
+    },
+    "dependencies": {
+        "postcss-loader": "^3.0.0",
+        "tailwindcss": "^1.1.4",
+        "vue-material": "^1.0.0-beta-11"
     }
 }
