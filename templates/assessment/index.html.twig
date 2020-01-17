@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AssessmentController!{% endblock %}
+{% block body %}
+    <div id="app"></div>
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('assessment') }}
+{% endblock %}
+{% block javascripts %}
+    <script>
+        window.cKLearnosityRequest = {{ learnosityRequest|json_encode()|raw }}
+    </script>
+    <script src="https://questions-va.learnosity.com?latest"></script>
+    {{ encore_entry_script_tags('assessment') }}
+{% endblock %}
