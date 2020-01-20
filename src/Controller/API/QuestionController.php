@@ -133,14 +133,16 @@ class QuestionController extends AbstractController
 
         return $response;
     }
+
     /**
      * @Route(
-     *     "/api/quiz/{quizId}/question/{id}",
+     *     "/api/quiz/{quizId}/question/{id}/",
      *     methods={"PUT"},
-     *     name="api_quiz_questions_create",
+     *     name="api_quiz_questions_update",
      *     requirements={"quizId"="\d+", "id": "\d+"}
      * )
      * @ParamConverter("question", class="App\Entity\Question")
+     * @param Question $question
      * @param Request $request
      * @return JsonResponse|Response
      */
@@ -175,7 +177,7 @@ class QuestionController extends AbstractController
 
     /**
      * @Route(
-     *     "/api/quiz/{quizId}/question/{id}",
+     *     "/api/quiz/{quizId}/question/{id}/",
      *     methods={"DELETE"},
      *     name="api_quiz_questions_destroy",
      *     requirements={"quizId"="\d+", "id"="\d+"}

@@ -11,16 +11,18 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        for($i = 0; $i < 5; ++$i) {
+        $configFixtures = $this->getConfigFixtures();
+
+        for ($i = 0; $i < 5; ++$i) {
             /** @var \App\Entity\Quiz $quiz
              * @noinspection PhpFullyQualifiedNameUsageInspection
              */
             $quiz = $this->getReference(QuizFixtures::QUIZ_REFERENCE_PREFIX . $i);
 
-            for($i = 0; $i < 5; ++$i) {
+            for ($i = 0; $i < 5; ++$i) {
                 $question = new Question();
                 $question->setQuiz($quiz);
-                $question->setConfig(new \stdClass());
+                $question->setConfig(!empty($configFixtures[$i]) ? $configFixtures[$i] : null);
                 $manager->persist($question);
             }
         }
@@ -35,6 +37,56 @@ class QuestionFixtures extends Fixture implements DependentFixtureInterface
     {
         return [
             QuizFixtures::class
+        ];
+    }
+
+    private function getConfigFixtures() {
+        return  [
+            [
+                'options' =>
+                    [
+                        0 =>
+                            [
+                                'label' => '[Choice A]',
+                                'value' => '0',
+                            ],
+                        1 =>
+                            [
+                                'label' => '[Choice B]',
+                                'value' => '1',
+                            ],
+                        2 =>
+                            [
+                                'label' => '[Choice C]',
+                                'value' => '2',
+                            ],
+                        3 =>
+                            [
+                                'label' => '[Choice D]',
+                                'value' => '3',
+                            ],
+                    ],
+                'stimulus' => 'Test 1',
+                'type' => 'mcq',
+                'validation' =>
+                    [
+                        'scoring_type' => 'exactMatch',
+                        'valid_response' =>
+                            [
+                                'score' => 1,
+                                'value' =>
+                                    [
+                                        0 => '3',
+                                        1 => '0',
+                                    ],
+                            ],
+                    ],
+                'ui_style' =>
+                    [
+                        'type' => 'horizontal',
+                    ],
+                'multiple_responses' => true,
+            ]
         ];
     }
 }

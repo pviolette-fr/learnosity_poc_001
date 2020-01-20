@@ -1,10 +1,17 @@
 {
-  "extends": "eslint:recommended",
-  "env": {
-    "browser": true
-  },
-  "rules": {
-    "quotes": [2, "single"],
-    "no-console": "warn"
-  }
+    "extends": "eslint:recommended",
+    "env": {
+        "browser": true
+    },
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": 2015
+    },
+    "rules": {
+        "quotes": [
+            2,
+            "single"
+        ],
+        "no-console": "warn"
+    }
 }

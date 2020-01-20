@@ -20,10 +20,9 @@ class Question
     private $id;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(type="json", nullable=true)
      * @Serializer\Groups({"list", "details"})
      * @Serializer\Type("array")
-     * @Assert\NotBlank()
      */
     private $config;
 
