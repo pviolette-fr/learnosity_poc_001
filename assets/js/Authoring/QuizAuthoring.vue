@@ -79,9 +79,9 @@
       onSaveButtonClick() {
         const promises = this.quiz.questions.map(question => Api.question.update(question, this.quiz));
 
-        promises.then((questions) => {
+        Promise.all(promises).then((questions) => {
           this.$set(this, 'questions', questions);
-        })
+        });
       },
       onAddQuestionClick() {
         this.states.addingQuestion = true;

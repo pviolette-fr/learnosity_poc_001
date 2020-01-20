@@ -3,15 +3,15 @@
       <md-toolbar class="md-primary">
         <span class="md-title">Assessment</span>
       </md-toolbar>
-      <div class="flex-grow bg-red-100 p-2">
-        <div v-for="(question, index) in quiz.questions" :key="`question-${index}`" v-show="index === currentQuestion">
-          <div  :class="`learnosity-response question-${question.response_id}`" />
-        </div>
+      <div class="flex-grow p-2 flex flex-col items-stretch px-20">
+        <md-card v-for="(question, index) in quiz.questions" :key="`question-${index}`" v-show="index === currentQuestion" class="p-4 w-full h-full">
+            <div  :class="`learnosity-response question-${question.response_id}`" />
+        </md-card>
       </div>
       <div class="flex flex-row w-full items-center content-center justify-center" style="height: 128px">
-        <md-button @click="onPreviousButtonClick">Previous</md-button>
-        <div>{{ currentQuestion + 1 }}</div>
-        <md-button @click="onNextButtonClick">Next</md-button>
+        <md-button @click="onPreviousButtonClick" :disabled="currentQuestion === 0">Previous</md-button>
+        <div>{{ `${currentQuestion + 1} / ${quiz.questions.length}` }}</div>
+        <md-button @click="onNextButtonClick"  :disabled="currentQuestion === quiz.questions.length - 1">Next</md-button>
         <md-button class="md-fab md-fab-bottom-right" @click="onSubmitButtonClick">Submit</md-button>
       </div>
     </div>
