@@ -1,12 +1,23 @@
 <template>
-  <div class="h-screen flex flex-col">
+  <div class="h-screen flex flex-col overflow-hidden">
     <md-toolbar class="md-primary">
       <span class="md-title">My Quizz</span>
     </md-toolbar>
-      <div class="flex flex-col w-full flex-grow max-h-full">
-        <div class="my-editor w-full flex-grow overflow-auto"></div>
-        <div class="flex flex-row">
-          <div class="w-full flex flex-row content-center" style="height:196px;">
+      <div class="flex flex-col justify-between	 w-full flex-grow overflow-hidden">
+        <div v-show="questions.length > 0" class="w-full overflow-auto p-2">
+          <div class="my-editor" />
+        </div>
+        <div v-show="questions.length === 0" class="w-full overflow-auto p-2 flex flex-col ">
+          <md-content class="max-w-50">
+            <p>This quiz is empty</p>
+            <md-button class="md-primary md-raised" @click="onAddQuestionClick">Create a question</md-button>
+          </md-content>
+        </div>
+        <div class="flex flex-row pt-4">
+          <md-button class="md-fab" @click.prevent="onAddQuestionClick">
+            <md-icon>add</md-icon>
+          </md-button>
+          <div class="w-full flex flex-row content-center overflow-x-scroll" style="height:196px;">
             <div
               v-for="(question, index) in questions"
               :key="`question${index}`"
@@ -24,19 +35,14 @@
                 <md-card-content>
                   #{{ question.id }}
                 </md-card-content>
-                <md-card-actions>
-                  <md-button class="" @click.stop="deleteQuestion(index)">
+                  <md-button class="md-raised md-icon-button" @click.stop="deleteQuestion(index)" style="position: absolute; bottom: -12px; right: -12px">
                     <md-icon>delete</md-icon>
                   </md-button>
-                </md-card-actions>
               </md-card>
             </div>
-            <md-button class="md-fab" @click.prevent="onAddQuestionClick">
-              <md-icon>add</md-icon>
-            </md-button>
           </div>
         </div>
-        <md-button class="md-fab md-fab-bottom-right" @click="onSaveButtonClick">
+        <md-button class="md-fab md-fab-bottom-right md-primary" md-ripple @click="onSaveButtonClick">
           <md-icon>save</md-icon>
         </md-button>
       </div>
