@@ -52,6 +52,12 @@
   import Api from '../API';
   let lastId = 1;
   export default {
+    props: {
+      id: {
+        required: true,
+        type: Number
+      }
+    },
     data() {
       return {
         questionEditorApp: null,
@@ -123,7 +129,7 @@
     },
     name: 'QuizAuthoring',
     mounted() {
-      Api.quiz.show(27).then((data) => {
+      Api.quiz.show(this.id).then((data) => {
         this.$set(this, 'questions', data.questions);
         this.quizId = data.id;
         const initOptions = {

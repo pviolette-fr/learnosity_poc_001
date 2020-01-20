@@ -2,13 +2,16 @@
 
 {% block title %}Hello QuizController!{% endblock %}
 {% block body %}
-    <div id="app"></div>
+    <div>
+        <ul>
+            {% for quiz in quizzes %}
+                <li><a href="{{ path('quiz_editor', {id: quiz.id}) }}">#{{ quiz.id }} - {{ quiz.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
 {% block stylesheets %}
     {{ parent() }}
-    {{ encore_entry_link_tags('authoring') }}
 {% endblock %}
 {% block javascripts %}
-    <script src="https://questioneditor.learnosity.com/?latest"></script>
-    {{ encore_entry_script_tags('authoring') }}
 {% endblock %}

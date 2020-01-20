@@ -38,6 +38,5 @@ if(!window.LearnosityQuestionEditor) {
 
 new Vue({
   el: '#app',
-  template: '<QuizAuthoring/>',
   components: { QuizAuthoring }
 });
