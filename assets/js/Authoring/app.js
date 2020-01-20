@@ -1,20 +1,23 @@
 import Vue from 'vue';
-import { MdButton, MdContent, MdTabs, MdIcon, MdCard, MdRipple, MdApp, MdToolbar, MdDrawer, MdList} from 'vue-material/dist/components'
+// import { MdButton, MdContent, MdTabs, MdIcon, MdCard, MdRipple, MdApp, MdToolbar, MdDrawer, MdList, MdProgressSpinner} from 'vue-material/dist/components'
+import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 import 'vue-material/dist/theme/default.css'
 
 import QuizAuthoring from './QuizAuthoring';
 
-Vue.use(MdApp);
-Vue.use(MdButton);
-Vue.use(MdCard);
-Vue.use(MdContent);
-Vue.use(MdDrawer);
-Vue.use(MdIcon);
-Vue.use(MdList);
-Vue.use(MdRipple);
-Vue.use(MdTabs);
-Vue.use(MdToolbar);
+Vue.use(VueMaterial);
+// Vue.use(MdApp);
+// Vue.use(MdButton);
+// Vue.use(MdCard);
+// Vue.use(MdContent);
+// Vue.use(MdDrawer);
+// Vue.use(MdIcon);
+// Vue.use(MdList);
+// Vue.use(MdProgessSpinner);
+// Vue.use(MdRipple);
+// Vue.use(MdTabs);
+// Vue.use(MdToolbar);
 // Dev code
 if(!window.LearnosityQuestionEditor) {
   window.LearnosityQuestionEditor = {
