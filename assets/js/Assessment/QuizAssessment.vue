@@ -4,13 +4,15 @@
         <span class="md-title">Assessment</span>
       </md-toolbar>
       <div class="flex-grow bg-red-100 p-2">
-        <div v-for="(question, index) in quiz.questions" :key="`question-${index}`" :class="`learnosity-response question-${question.id}`" />
-        <span class="learnosity-response question-60005"></span>
+        <div v-for="(question, index) in quiz.questions" :key="`question-${index}`" v-show="index === currentQuestion">
+          <div  :class="`learnosity-response question-${question.response_id}`" />
+        </div>
       </div>
       <div class="flex flex-row w-full items-center content-center justify-center" style="height: 128px">
-        <md-button>Previous</md-button>
+        <md-button @click="onPreviousButtonClick">Previous</md-button>
         <div>{{ currentQuestion + 1 }}</div>
-        <md-button>Next</md-button>
+        <md-button @click="onNextButtonClick">Next</md-button>
+        <md-button class="md-fab md-fab-bottom-right" @click="onSubmitButtonClick">Submit</md-button>
       </div>
     </div>
 </template>
@@ -29,9 +31,23 @@
           }
         }
       },
+      methods: {
+        onPreviousButtonClick() {
+          if(this.currentQuestion > 0)
+            this.currentQuestion --;
+        },
+        onNextButtonClick() {
+          if (this.currentQuestion < this.quiz.questions.length - 1) {
+            this.currentQuestion++;
+          }
+        },
+        onSubmitButtonClick() {
+          console.log(this.questionsApp.getResponses());
+        }
+      },
       mounted() {
         const initializationObject = window.cKLearnosityRequest;
-
+      console.log(initializationObject);
         const callbacks = {
           errorListener: function(e) {
             // Adds a listener to all error codes.
@@ -70,6 +86,8 @@
             console.log("Save progress - ", progress);
           }
         };
+
+        this.$set(this.quiz, 'questions', initializationObject.questions);
 
         this.questionsApp = window.LearnosityApp.init(initializationObject, callbacks);
 

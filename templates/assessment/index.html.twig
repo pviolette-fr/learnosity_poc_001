@@ -10,7 +10,7 @@
 {% endblock %}
 {% block javascripts %}
     <script>
-        window.cKLearnosityRequest = {{ learnosityRequest|json_encode()|raw }}
+        window.cKLearnosityRequest = {{ learnosityRequest|raw }}
     </script>
     <script src="https://questions-va.learnosity.com?latest"></script>
     {{ encore_entry_script_tags('assessment') }}
