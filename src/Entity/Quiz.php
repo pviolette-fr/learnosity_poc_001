@@ -56,6 +56,11 @@ class Quiz
         return $this;
     }
 
+    public function getMaxScore(): int
+    {
+        return 100; // TODO
+    }
+
     /**
      * @return Collection|Question[]
      */

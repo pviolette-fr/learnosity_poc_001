@@ -18,6 +18,5 @@ Vue.use(MdToolbar);
 
 new Vue({
   el: '#app',
-  template: '<QuizAssessment/>',
   components: { QuizAssessment }
 });
