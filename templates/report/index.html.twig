@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ReportController!{% endblock %}
+{% block body %}
+    <div id="app">
+        <quiz-report />
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('report') }}
+{% endblock %}
+{% block javascripts %}
+    {{ encore_entry_script_tags('report') }}
+{% endblock %}

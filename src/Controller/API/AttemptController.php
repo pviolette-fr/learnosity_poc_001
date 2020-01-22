@@ -7,6 +7,8 @@ use App\Entity\Learner;
 use App\Entity\Question;
 use App\Entity\Quiz;
 use App\Entity\QuizAttempt;
+use App\Repository\QuizAttemptRepository;
+use App\Service\Scoring\QuizScoringService;
 use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use LearnositySdk\Request\Init;
@@ -19,6 +21,18 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AttemptController extends ApiController
 {
+    /**
+     * @var QuizScoringService
+     */
+    private $scoringService;
+
+    public function __construct(SerializerInterface $serializer, ValidatorInterface $validator, QuizScoringService $scoringService)
+    {
+        parent::__construct($serializer, $validator);
+        $this->scoringService = $scoringService;
+    }
+
+
     /**
      * @Route(
      *     "/api/quiz/{quizId}/startAttempt",
@@ -96,11 +110,9 @@ class AttemptController extends ApiController
 
         $entityManager = $this->getDoctrine()->getManager();
 
-        $quizAttempt->setIsSubmitted(true);
-        $quizAttempt->setSubmittedAt(new \DateTime());
 
         foreach ($answers as $answer) {
-            $answer->setQuizAttempt($quizAttempt);
+            $quizAttempt->addAttemptQuestionAnswer($answer);
             if($answer->getQuestion()->getQuiz()->getId() !== $quizAttempt->getQuiz()->getId()) {
                 return new Response('One of this answered question is not part of the attempted quiz', Response::HTTP_BAD_REQUEST);
             }
@@ -108,10 +120,44 @@ class AttemptController extends ApiController
 
             $entityManager->persist($answer);
         }
+        $quizAttempt->setIsSubmitted(true);
+        $quizAttempt->setSubmittedAt(new \DateTime());
+
+        $this->scoringService->scoreQuizAttempt($quizAttempt);
+
         $entityManager->flush();
 
-        $response = new Response($this->serializer->serialize($answers, 'json'), Response::HTTP_OK);
+        $response = new Response($this->serializer->serialize($quizAttempt, 'json'), Response::HTTP_OK);
         $response->headers->set('Content-Type', 'application/json');
+        return $response;
+    }
+
+    /**
+     * @Route(
+     *     "/api/quiz/{quizId}/attempts",
+     *     methods={"GET"},
+     *     name="api_quiz_attempts"
+     * )
+     * @ParamConverter("quiz", options={"id"="quizId"}, class="App\Entity\Quiz")
+     * @param Quiz $quiz
+     */
+    public function quizSubmittedAttempts(Quiz $quiz) {
+        /** @var QuizAttemptRepository $attemptRepository */
+        $attemptRepository = $this->getDoctrine()->getRepository(QuizAttempt::class);
+        $query = $attemptRepository->createQueryBuilder('quiz_attempt')
+            ->where('quiz_attempt.isSubmitted = TRUE')
+            ->andWhere('quiz_attempt.quiz = :quiz')
+            ->orderBy('quiz_attempt.submittedAt', 'ASC')
+            ->setParameter('quiz', $quiz->getId())
+            ->getQuery();
+
+        $attempts = $query->getResult();
+
+        $code = count($attempts) === 0 ? 204 : 200;
+        // TODO serializer groups
+        $response = new Response($this->serializer->serialize($attempts, 'json'), $code);
+        $response->headers->set('Content-Type', 'application/json');
+
         return $response;
     }
 

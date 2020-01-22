@@ -27,3 +27,14 @@ export const submit = (attempt, answers) => {
       throw err;
     })
 };
+
+export const quizReport = (quiz) => {
+  const url = `/quiz/${quiz.id}/attempts`;
+
+  return Axios.get(url)
+    .then(response => response.data)
+    .catch(err => {
+      console.log(err);
+      throw err;
+    })
+};

@@ -84,4 +84,20 @@ class Question
         // TODO
         return 1;
     }
+
+    public function getType(): string
+    {
+        if(!empty($this->config)) {
+            return $this->config['type'];
+        }
+        return null;
+    }
+
+    public function getValidationRules(): array
+    {
+        if(empty($this->config)) {
+            return null;
+        }
+        return $this->config['validation'];
+    }
 }
