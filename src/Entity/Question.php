@@ -78,4 +78,10 @@ class Question
 
         return $this;
     }
+
+    public function getMaxScore(): int
+    {
+        // TODO
+        return 1;
+    }
 }

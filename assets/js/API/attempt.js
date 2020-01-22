@@ -14,3 +14,16 @@ export const start = (quiz) => {
       throw err
     });
 };
+
+export const submit = (attempt, answers) => {
+  const url = `/attempt/${attempt.id}/submit`
+
+  return Axios.post(url, answers).then((response) => {
+    console.log(response);
+    return response.data;
+  })
+    .catch(err => {
+      console.log(err);
+      throw err;
+    })
+};

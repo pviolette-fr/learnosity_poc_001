@@ -56,7 +56,23 @@
           }
         },
         onSubmitButtonClick() {
-          console.log(this.questionsApp.getResponses());
+          const answers = this.questionsApp.getResponses();
+
+          const formatted = Object.keys(answers).map(questionId => {
+            return {
+              quiz_attempt: {
+                id: this.attempt.id
+              },
+              question: {
+                id: questionId
+              },
+              value: answers[questionId].value,
+              value_type: answers[questionId].type
+            }
+          });
+
+          console.log(formatted);
+          Api.attempt.submit(this.attempt, formatted);
         },
 
         loadQuiz(){

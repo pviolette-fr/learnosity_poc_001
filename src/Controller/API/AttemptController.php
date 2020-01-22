@@ -2,6 +2,7 @@
 
 namespace App\Controller\API;
 
+use App\Entity\AttemptQuestionAnswer;
 use App\Entity\Learner;
 use App\Entity\Question;
 use App\Entity\Quiz;
@@ -10,31 +11,19 @@ use JMS\Serializer\SerializationContext;
 use JMS\Serializer\SerializerInterface;
 use LearnositySdk\Request\Init;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
-class AttemptController extends AbstractController
+class AttemptController extends ApiController
 {
-    /**
-     * @var SerializerInterface
-     */
-    private $serializer;
-
-    /**
-     * AttemptController constructor.
-     * @param SerializerInterface $serializer
-     */
-    public function __construct(SerializerInterface $serializer)
-    {
-        $this->serializer = $serializer;
-    }
-
-
     /**
      * @Route(
      *     "/api/quiz/{quizId}/startAttempt",
-     *     methods={"POST"}
+     *     methods={"POST"},
+     *     name="api_start_attempt"
      * )
      * @ParamConverter("quiz", options={"id"="quizId"}, class="App\Entity\Quiz")
      *
@@ -79,17 +68,51 @@ class AttemptController extends AbstractController
 
     /**
      * @Route(
-     *     "/api/attempt/{id}/question/{questionId}/submit",
-     *     methods={"POST"}
+     *     "/api/attempt/{id}/submit",
+     *     methods={"POST"},
+     *     name="api_submit_attempt"
      * )
      * @ParamConverter("quizAttempt", class="App\Entity\QuizAttempt")
-     * @ParamConverter("question", options={"id": "questionId"}, class="App\Entity\Question")
      * @param QuizAttempt $quizAttempt
-     * @param Question $question
+     * @param Request $request
+     * @return JsonResponse|Response
+     * @throws \Exception
      */
-    public function submitAnswer(QuizAttempt $quizAttempt, Question $question)
+    public function submitAnswers(QuizAttempt $quizAttempt, Request $request)
     {
-        // TODO
+        if($quizAttempt->getIsSubmitted()) {
+          return new JsonResponse([
+              'message' => 'Already Submitted'
+          ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $rawData = $request->getContent();
+        /** @var AttemptQuestionAnswer[] $answers */
+        $answers = $this->serializer->deserialize($rawData, 'ArrayCollection<App\Entity\AttemptQuestionAnswer>', 'json');
+        $errors = $this->getErrors($answers, []);
+        if($errors !== false) {
+            return $errors;
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+
+        $quizAttempt->setIsSubmitted(true);
+        $quizAttempt->setSubmittedAt(new \DateTime());
+
+        foreach ($answers as $answer) {
+            $answer->setQuizAttempt($quizAttempt);
+            if($answer->getQuestion()->getQuiz()->getId() !== $quizAttempt->getQuiz()->getId()) {
+                return new Response('One of this answered question is not part of the attempted quiz', Response::HTTP_BAD_REQUEST);
+            }
+            $answer->setMaxScore($answer->getQuestion()->getMaxScore());
+
+            $entityManager->persist($answer);
+        }
+        $entityManager->flush();
+
+        $response = new Response($this->serializer->serialize($answers, 'json'), Response::HTTP_OK);
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;
     }
 
 
