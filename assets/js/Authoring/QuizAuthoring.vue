@@ -20,7 +20,7 @@
         <div v-else>
           <md-progress-spinner md-mode="indeterminate"/>
         </div>
-        <div class="w-full flex flex-row content-center overflow-x-scroll" style="height:196px;">
+        <div class="w-full flex flex-row content-center overflow-x-scroll" style="height:128px;">
           <div
             v-for="(question, index) in quiz.questions"
             :key="`question${index}`"

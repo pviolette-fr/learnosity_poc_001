@@ -78,7 +78,10 @@
     methods: {
       getScoreForQuestion(attempt, question) {
         const index = attempt.attempt_question_answers.findIndex(anwser => anwser.question.id === question.id);
-        return attempt.attempt_question_answers[index].score;
+        if (attempt.attempt_question_answers[index]) {
+          return attempt.attempt_question_answers[index].score;
+        }
+        return null;
       },
       loadSelectedQuizReports() {
         console.log("loadSelectedQuizReports");
