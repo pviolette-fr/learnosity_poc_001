@@ -125,6 +125,7 @@ class AttemptController extends ApiController
 
         $this->scoringService->scoreQuizAttempt($quizAttempt);
 
+        $entityManager->persist($quizAttempt);
         $entityManager->flush();
 
         $response = new Response($this->serializer->serialize($quizAttempt, 'json'), Response::HTTP_OK);

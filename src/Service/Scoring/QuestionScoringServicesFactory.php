@@ -7,7 +7,8 @@ namespace App\Service\Scoring;
 class QuestionScoringServicesFactory
 {
     private $services = [
-        'mcq' => QuestionMcqScoringService::class
+        'mcq' => QuestionMcqScoringService::class,
+        'association' => AssociationScoringService::class,
     ];
 
 
