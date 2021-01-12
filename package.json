@@ -2,7 +2,7 @@
     "devDependencies": {
         "@symfony/webpack-encore": "^0.27",
         "eslint": "^6.0",
-        "node-sass": "^4.13.0",
+        "node-sass": "^4.13.1",
         "sass-loader": "^7.0.1",
         "vue": "^2.6.11",
         "vue-loader": "^15.8.3",
