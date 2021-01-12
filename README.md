@@ -1,6 +1,6 @@
 # Learnosity POC
 
-POC for a new quiz editor in the CKLS, using [Learnosity](https://learnosity.com/)
+POC for a quiz editor, using [Learnosity](https://learnosity.com/)
 
 ## Install
 
